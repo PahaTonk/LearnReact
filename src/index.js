@@ -27,16 +27,31 @@ class Timer extends React.Component {
     return (
       <div>
         <p>Таймер:</p>
-        <p>
-        <span>{Math.round(value/INTERVAL/60/60)} : </span>
-        <span>{Math.round(value/INTERVAL/60)} : </span>
-        <span>{Math.round(value/INTERVAL)} . </span>
-        <span>{value % INTERVAL}</span>
-        </p>
+        <ClockValue value={value} />
       </div>
     );
   }
 }
 
-  ReactDOM.render(<Timer />,  document.getElementById('root'));
+function ClockValue(props) {
+  const value = props.value;
+  return (
+    <p>
+      <span>{Math.round(value/INTERVAL/60/60)} : </span>
+      <span>{Math.round(value/INTERVAL/60)} : </span>
+      <span>{Math.round(value/INTERVAL)} . </span>
+      <span>{value % INTERVAL}</span>
+    </p>
+  )
+}
+function Application() {
+  return (
+    <p>
+      <Timer/>
+      <Timer/>
+      <Timer/>
+    </p>
+  );
+}
+  ReactDOM.render(<Application />,  document.getElementById('root'));
 //2.6.5 Нисходящий поток данных https://learn-reactjs.ru/basics/state-and-lifecycle
