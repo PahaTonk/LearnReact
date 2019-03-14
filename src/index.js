@@ -1,66 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {this.props.value}
-      </button>
-    );
-  }
-}
 
-class Board extends React.Component {
-  renderSquare(i) {
-    return <Square value={i} />;
+const INTERVAL = 100;
+
+class Timer extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = {value: 0}
   }
 
-  render() {
-    const status = 'Next player: X';
+  increment() {
+    this.setState({value: this.state.value + 1});
+  }
 
+  componentDidMount() {
+    this.timerID = setInterval(() => this.increment(), 1000/INTERVAL);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  render () {
+    const value = this.state.value;
     return (
       <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        <p>Таймер:</p>
+        <p>
+        <span>{Math.round(value/INTERVAL/60/60)} : </span>
+        <span>{Math.round(value/INTERVAL/60)} : </span>
+        <span>{Math.round(value/INTERVAL)} . </span>
+        <span>{value % INTERVAL}</span>
+        </p>
       </div>
     );
   }
 }
 
-class Game extends React.Component {
-  render() {
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
-      </div>
-    );
-  }
-}
-
-// ========================================
-
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
+  ReactDOM.render(<Timer />,  document.getElementById('root'));
+//2.6.5 Нисходящий поток данных https://learn-reactjs.ru/basics/state-and-lifecycle
