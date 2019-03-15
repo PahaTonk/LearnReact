@@ -2,53 +2,46 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class TimeMinsk extends Component {
+const propsValues = {
+    title: "Список смартфонов",
+    items: [
+            "HTC U Ultra",
+            "iPhone 7",
+            "Google Pixel",
+            "Hawei P9",
+            "Meizu Pro 6",
+            "Asus Zenfone 3"
+    ]
+};
+
+class Item extends Component {
+  render () {
+    return <li>{this.props.name}</li>;
+  }
+}
+
+class ItemsList extends Component {
   constructor (props) {
     super(props);
-    this.state = {date: new Date(), name: 'Pavel'}
+    this.state = {items : this.props.data.items};
+    this.filterList = this.filterList.bind(this);
   }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps()");
+  filterList (e) {
+    this.setState({items : this.props.data.items.filter((item) => item.toLowerCase().search(e.target.value.toLowerCase()) !== -1)});
   }
-  
-  componentWillMount(){
-    console.log("componentWillMount()");
-  }
-
-  componentDidMount() {
-    console.log("componentDidMount()");
-    this.timerId = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    console.log("componentWillUnmount()");
-    clearInterval(this.timerId);
-  }
-
-  shouldComponentUpdate(){
-      console.log("shouldComponentUpdate()");
-      return true;
-  }
-
-  componentWillUpdate(){
-      console.log("componentWillUpdate()");
-  }
-
-  componentDidUpdate(){
-      console.log("componentDidUpdate()");
-  }
-
-  tick() {
-    this.setState({date: new Date()});
-  }
-  render() {
-    return(
+  render () {
+    return (
       <div>
-        <h1>Hello, {this.state.name}</h1>
-        <h2>Time - {this.state.date.toLocaleTimeString()}</h2>
+        <h2>{this.props.data.title}</h2>
+        <input placeholder="Поиск" onChange={this.filterList} />
+        <ul>
+          {
+            this.state.items.map((item) => <Item name={item} key={item} />)
+          }
+        </ul>
       </div>
     )
   }
 }
-  ReactDOM.render(<TimeMinsk  />,  document.getElementById('root'));
+
+ReactDOM.render(<ItemsList data={propsValues}/> ,  document.getElementById('root'));
