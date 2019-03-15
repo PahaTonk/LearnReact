@@ -1,47 +1,58 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.css'
 
-const propsValues = {
-    title: "Список смартфонов",
-    items: [
-            "HTC U Ultra",
-            "iPhone 7",
-            "Google Pixel",
-            "Hawei P9",
-            "Meizu Pro 6",
-            "Asus Zenfone 3"
-    ]
-};
-
-class Item extends Component {
-  render () {
-    return <li>{this.props.name}</li>;
-  }
+function LabelEl (props) {
+    return (
+      <label>
+        <h3>{props.name}</h3>
+        <input type={props.type} placeholder={props.name} value={props.nameStat} onChange={props.changeEl} style={props.styleName} key={props.keyEl} data-key={props.keyEl}/>
+      </label>
+    )
 }
 
-class ItemsList extends Component {
-  constructor (props) {
+class FormElement extends Component {
+  constructor(props) {
     super(props);
-    this.state = {items : this.props.data.items};
-    this.filterList = this.filterList.bind(this);
+    this.state = {name : '123', nameValid : false, age: '123', ageValid : false, styleName : {}, styleAge : {} };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
-  filterList (e) {
-    this.setState({items : this.props.data.items.filter((item) => item.toLowerCase().search(e.target.value.toLowerCase()) !== -1)});
+
+  validateInput(param1, nameStat, param2 , num, validStat, style) {
+    if (param1 === nameStat && param2  > num) {
+      this.setState({ [style] : {'borderColor':'green'} });
+      this.setState({ [validStat] : true });
+      return true;
+    } else if (param1 === nameStat && param2  < num) {
+      this.setState({[style] : {'borderColor':'red'}, [validStat] : false  });
+      return false;
+    }
+    return null;
   }
-  render () {
+
+  handleChange(e) {
+    let [dataAttr, targetValLen, targetVal] = [e.target.dataset.key, e.target.value.length, e.target.value];
+    dataAttr === 'name' ? this.validateInput(dataAttr, 'name', targetValLen, 2, 'nameValid', 'styleName') : this.validateInput(dataAttr, 'age', targetVal, 17, 'ageValid', 'styleAge');
+    this.setState({[dataAttr] : targetVal});
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    if(this.state.nameValid !== true || this.state.ageValid !== true) return;
+    alert('M-m-m-m Ni-i-i-ice!');
+  }
+  render() {
+    const [titlenNameStat, titleAgeStat] = [this.state.name, this.state.age];
+    const [styleNameStat, styleAgeStat] = [this.state.styleName, this.state.styleAge];
+    const [handleChangeValidat, handleSubmitFunc] = [this.handleChange, this.handleSubmit];
     return (
-      <div>
-        <h2>{this.props.data.title}</h2>
-        <input placeholder="Поиск" onChange={this.filterList} />
-        <ul>
-          {
-            this.state.items.map((item) => <Item name={item} key={item} />)
-          }
-        </ul>
-      </div>
+      <form onSubmit={handleSubmitFunc}>
+        <LabelEl type="text" name="Your name" keyEl="name" nameStat={titlenNameStat} changeEl={handleChangeValidat} styleName={styleNameStat}/>
+        <LabelEl type="text" name="Your age" keyEl="age" nameStat={titleAgeStat} changeEl={handleChangeValidat} styleName={styleAgeStat}/>
+        <input type="submit" />
+      </form>
     )
   }
 }
 
-ReactDOM.render(<ItemsList data={propsValues}/> ,  document.getElementById('root'));
+ReactDOM.render(<FormElement /> ,  document.getElementById('root'));
