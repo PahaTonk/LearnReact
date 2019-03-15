@@ -1,48 +1,54 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class ClickButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {class: "off", label: "Click", style: {"backgroundColor":"red"}};
-
-    this.press = this.press.bind(this);
-  }
-  press (e) {
-    console.log(e);
-    let className = this.state.class === "off" ? "on" : "off";
-    let styleBut = className === "on" ? {"backgroundColor":"green"} : {"backgroundColor":"red"};
-    this.setState({style: styleBut});
-    this.setState({class: className});
-  }
-  render() {
-    return (
-      <div>
-      <button onClick={this.press} className={this.state.class} style={this.state.style}>{this.state.label}</button>
-      <CountNumber label={`${this.state.label} Count`} />
-      </div>
-    )
-  }
-}
-class CountNumber extends React.Component {
+class TimeMinsk extends Component {
   constructor (props) {
     super(props);
-    this.state = {value: 0};
-    this.pressBut = this.pressBut.bind(this);
+    this.state = {date: new Date(), name: 'Pavel'}
   }
-  pressBut () {
-    console.log(this.state.value);
-    this.setState({value: this.state.value+1});
-    console.log(this.state.value);
+
+  componentWillReceiveProps(nextProps) {
+    console.log("componentWillReceiveProps()");
   }
-  render () {
+  
+  componentWillMount(){
+    console.log("componentWillMount()");
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount()");
+    this.timerId = setInterval(() => this.tick(), 1000);
+  }
+
+  componentWillUnmount() {
+    console.log("componentWillUnmount()");
+    clearInterval(this.timerId);
+  }
+
+  shouldComponentUpdate(){
+      console.log("shouldComponentUpdate()");
+      return true;
+  }
+
+  componentWillUpdate(){
+      console.log("componentWillUpdate()");
+  }
+
+  componentDidUpdate(){
+      console.log("componentDidUpdate()");
+  }
+
+  tick() {
+    this.setState({date: new Date()});
+  }
+  render() {
     return(
       <div>
-        <h2 style={{color:'blue',fontSize: '15px'}}>{this.state.value}</h2>
-        <button onClick={this.pressBut}>{this.props.label}</button>
+        <h1>Hello, {this.state.name}</h1>
+        <h2>Time - {this.state.date.toLocaleTimeString()}</h2>
       </div>
     )
   }
 }
-  ReactDOM.render(<ClickButton />,  document.getElementById('root'));
+  ReactDOM.render(<TimeMinsk  />,  document.getElementById('root'));
