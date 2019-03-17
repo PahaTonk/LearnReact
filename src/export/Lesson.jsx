@@ -1,42 +1,34 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export const Count = ({ counter }) => {
-  return <h1>{`Number: ${counter}`}</h1>
-}
-
-export const  Button = () => (
-   <button>Simple button</button>
+const MyLink = ({ text, onClick}) => (
+  <a href="/test" onClick={onClick}>{text}</a>
 )
 
-export class CountNumber extends Component {
-  static propTypes = {
-    children: PropTypes.element,
-    child: PropTypes.element,
-  }
-  static defaultProps = {
-    children: null,
-    child: null,
-  }
-  state = {
-    counter : 0,
+MyLink.propTypes = {
+  text : PropTypes.string,
+  onClick : PropTypes.func.isRequired,
+}
+MyLink.defaultProps = {
+  text : 'Link',
+  onClick : () => {},
+}
+
+class App extends Component {
+
+  handleClickNow = (e) => {
+    console.log('Новый обработчик');
   }
 
-  handleClick = (e) => {
-    this.setState( ({ counter }) => ({
-      counter : ++counter
-    }) );
+  handleClick = (e, str) => {
+    e.preventDefault();
+    console.log(str);
+    this.handleClickNow();
   }
-  render() {
-    const { counter } = this.state;
-    const { children, child } = this.props;
+  render () {
     return (
-      <div>
-        { child }
-        <div>{ counter }</div>
-        { React.cloneElement(children, {counter}) }
-        <button onClick={ this.handleClick }>+1</button>
-      </div>
-    )
+      <MyLink onClick={(e) => this.handleClick(e, 'Доп аргумент')}/>
+    );
   }
 }
+export default App;
