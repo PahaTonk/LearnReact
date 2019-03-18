@@ -1,34 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const MyLink = ({ text, onClick}) => (
-  <a href="/test" onClick={onClick}>{text}</a>
-)
-
-MyLink.propTypes = {
-  text : PropTypes.string,
-  onClick : PropTypes.func.isRequired,
-}
-MyLink.defaultProps = {
-  text : 'Link',
-  onClick : () => {},
+const ValidationMsg = ({ val }) => {
+  if(val >= 10) {
+    return <h2>Good</h2>;
+  } else {
+    return <h3>{`Bad. ${val} < 10 `}</h3>;
+  }
 }
 
-class App extends Component {
-
-  handleClickNow = (e) => {
-    console.log('Новый обработчик');
-  }
-
-  handleClick = (e, str) => {
-    e.preventDefault();
-    console.log(str);
-    this.handleClickNow();
-  }
-  render () {
-    return (
-      <MyLink onClick={(e) => this.handleClick(e, 'Доп аргумент')}/>
-    );
-  }
+const App = () => {
+  const val = 8;
+  return (
+    <div>
+      <ValidationMsg val={8} />
+      {val >= 10 ? <h2>Good</h2> : <h3>{`Bad. ${val} < 10 `}</h3>}
+      {val && <h2>{`${val} is true`}</h2>}
+    </div>
+  )
 }
 export default App;
