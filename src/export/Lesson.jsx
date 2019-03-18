@@ -5,7 +5,7 @@ class Form extends Component {
   state = {
     inputText: '',
     textareaText: '',
-    selectText: 'Front-end',
+    selectText: '',
     showData: {
       name: '',
       text: '',
@@ -13,22 +13,16 @@ class Form extends Component {
     }
   }
 
-  handleInputChange = ({ target: { value } }) => {
-    this.setState({
-     inputText: value
-   });
-  }
+  getRef = node => this.el = node;
+  textareaRef = React.createRef();
+  selectRef = React.createRef();
 
-  handleTextareaChange = ({ target: { value } }) => {
+  handleChange = ({ target: { value } }) => {
     this.setState({
-     textareaText: value
+      inputText: this.el.value,
+      textareaText: this.textareaRef.current.value,
+      selectText: this.selectRef.current.value
    });
-  }
-
-  handleSelectChange = ({ target: { value } }) => {
-    this.setState({
-      selectText: value
-    });
   }
 
 
@@ -38,7 +32,7 @@ class Form extends Component {
     this.setState({
       inputText: '',
       textareaText: '',
-      selectText: 'Front-end',
+      selectText: '',
       showData: {
         name: inputText,
         text: textareaText,
@@ -55,14 +49,19 @@ class Form extends Component {
           <form>
             <label>
               Name:<br />
-              <input type="text" name="name" value={inputText} onChange={this.handleInputChange} />
+              <input type="text" name="name"
+               value={inputText}
+               ref={this.getRef}
+               onChange={this.handleChange} />
             </label><br />
             <label htmlFor="text">Text:</label>
             <textarea id="text"
               value={textareaText}
-              onChange={this.handleTextareaChange} /><br />
+              ref={this.textareaRef}
+              onChange={this.handleChange} /><br />
             <select value={selectText}
-              onChange={this.handleSelectChange}>
+              ref={this.selectRef}
+              onChange={this.handleChange}>
               <option value="Front-end">Front-end</option>
               <option value="Back-end">Back-end</option>
             </select>
