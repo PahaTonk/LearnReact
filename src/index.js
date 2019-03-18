@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import App from './export/Lesson.jsx'
+import Form from './export/Lesson.jsx'
 import './index.css';
 
-ReactDOM.render(<App />,  document.getElementById('root'));
+ReactDOM.render(<Form />,  document.getElementById('root'));

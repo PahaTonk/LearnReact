@@ -1,41 +1,79 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-const Tab1 = () => {
-  return <h2>Tab1</h2>;
-}
-
-const Tab2 = () => {
-  return <h2>Tab2</h2>;
-}
-
-const Tab3 = () => {
-  return <h2>Tab3</h2>;
-}
-
-class App extends Component {
+class Form extends Component {
   state = {
-    activeTab : 1,
+    inputText: '',
+    textareaText: '',
+    selectText: 'Front-end',
+    showData: {
+      name: '',
+      text: '',
+      position: '',
+    }
   }
-  handleTab = (e) => {
+
+  handleInputChange = ({ target: { value } }) => {
     this.setState({
-      activeTab: +e.target.dataset.name,
+     inputText: value
+   });
+  }
+
+  handleTextareaChange = ({ target: { value } }) => {
+    this.setState({
+     textareaText: value
+   });
+  }
+
+  handleSelectChange = ({ target: { value } }) => {
+    this.setState({
+      selectText: value
     });
   }
+
+
+  handleShow = (e) => {
+    e.preventDefault();
+    const { inputText, textareaText, selectText } = this.state;
+    this.setState({
+      inputText: '',
+      textareaText: '',
+      selectText: 'Front-end',
+      showData: {
+        name: inputText,
+        text: textareaText,
+        position: selectText,
+      }
+    });
+  }
+
   render() {
-    const { activeTab } = this.state;
-    const arr = ['Tab1', 'Tab2', 'Tab3'];
+    const { inputText, textareaText, selectText, showData } = this.state;
+    const { name, text, position } = showData;
     return (
       <Fragment>
-        {arr.map( (title, index) =>  {
-          return <button data-name={index+1} key={`${index+1}key`} onClick={this.handleTab}>{title}</button>
-        } )}
-        {activeTab === 1 && <Tab1 />}
-        {activeTab === 2 && <Tab2 />}
-        {activeTab === 3 && <Tab3 />}
-        {activeTab === 1 ? <Tab1 /> : activeTab === 2 ? <Tab2 /> : <Tab3 />}
+          <form>
+            <label>
+              Name:<br />
+              <input type="text" name="name" value={inputText} onChange={this.handleInputChange} />
+            </label><br />
+            <label htmlFor="text">Text:</label>
+            <textarea id="text"
+              value={textareaText}
+              onChange={this.handleTextareaChange} /><br />
+            <select value={selectText}
+              onChange={this.handleSelectChange}>
+              <option value="Front-end">Front-end</option>
+              <option value="Back-end">Back-end</option>
+            </select>
+            <button onClick={this.handleShow}>Show</button>
+          </form>
+          {name && <h2>{name}</h2>}
+          {text && <h2>{text}</h2>}
+          {position && <h2>{position}</h2>}
       </Fragment>
     );
   }
 }
-export default App;
+
+export default Form;
