@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import Lesson from './export/Lesson.jsx'
+import App from './export/Lesson.jsx'
 import './index.css';
+import { BrowserRouter } from 'react-router-dom'
 
-ReactDOM.render(<Lesson />,  document.getElementById('root'));
+ReactDOM.render(<BrowserRouter>
+                  <App />
+                </BrowserRouter>,  document.getElementById('root'));
