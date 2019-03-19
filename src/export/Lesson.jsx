@@ -32,15 +32,17 @@ const FullRoster = () => (
     </ul>
   </div>
 )
-const Schedule = () => (
-  <div>
-    <ul>
-      <li>6/5 @ Спартак</li>
-      <li>6/8 vs Зенит</li>
-      <li>6/14 @ Рубин</li>
-    </ul>
-  </div>
-)
+const Schedule = () => {
+  console.log(2)
+  return   <div>
+      <ul>
+        <li>6/5 @ Спартак</li>
+        <li>6/8 vs Зенит</li>
+        <li>6/14 @ Рубин</li>
+      </ul>
+    </div>
+}
+
 const Home = () => (
   <div>
     <h1>Добро пожаловать на наш сайт!</h1>
@@ -48,11 +50,10 @@ const Home = () => (
 )
 
 const Player = (props) => {
+console.log(1)
   const player = PlayerAPI.get(
     parseInt(props.match.params.number, 10)
   )
-  console.log(player);
-  console.log(props);
   if (!player) {
     return <div>Sorry, but the player was not found</div>
   }
@@ -60,14 +61,15 @@ const Player = (props) => {
       <div>
         <h1>{player.name} (#{player.number})</h1>
         <h2>{player.position}</h2>
+        <Link to="/roster">Back</Link>
       </div>
   )
 }
 
 const Roster = () => (
   <Switch>
-    <Route exact page="/roster" component={FullRoster} />
-    <Route page='/roster/:number' component={Player}/>
+    <Route exact path="/roster" component={FullRoster} />
+    <Route path='/roster/:number' component={Player}/>
   </Switch>
 )
 
