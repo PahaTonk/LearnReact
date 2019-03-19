@@ -1,35 +1,39 @@
 import React, { Component, Fragment } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-const Preloader = () => {
-  return <h1>Preloader</h1>
-}
+class MyPortal extends Component {
+  el = document.createElement('div');
 
-const AddHello = ({ data : { text } }) => {
-  return <h1>{text}</h1>
+  componentDidMount() {
+    document.body.appendChild(this.el);
+  }
+
+  componentWillUnmount() {
+    document.body.removeChild(this.el);
+  }
+
+  render() {
+    return ReactDOM.createPortal(this.props.children, this.el);
+  }
 }
 
 class Lesson extends Component {
   state = {
-    data : {}
+    counter: 0
   }
-
-  answerServer = () => {
-    setTimeout( () => {
-      this.setState({ data : {
-        load: true,
-        text: 'Hello!'
-      } });
-    }, 3000 );
+  handleClick = (e) => {
+    this.setState( ({counter}) => ({counter: counter+1 }) );
   }
-
   render() {
-    const { data } = this.state;
-    this.answerServer();
     return (
-      <Fragment>
-        {!Object.keys(data).length ? <Preloader /> : <AddHello {...this.state} />}
-      </Fragment>
+      <div onClick={this.handleClick}>
+        <span>{this.state.counter}</span>
+        <MyPortal>
+          <div>TEST PORTAL</div>
+          <button>Click</button>
+        </MyPortal>
+      </div>
     );
   }
 }
