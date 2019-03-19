@@ -2,38 +2,29 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-class MyPortal extends Component {
-  el = document.createElement('div');
+const TitleContext = React.createContext();
 
-  componentDidMount() {
-    document.body.appendChild(this.el);
-  }
+const LevelOne = () => <LevelTwo />;
 
-  componentWillUnmount() {
-    document.body.removeChild(this.el);
-  }
+const LevelTwo = () => <LevelThree />;
 
-  render() {
-    return ReactDOM.createPortal(this.props.children, this.el);
-  }
-}
+const LevelThree = () => (
+  <TitleContext.Consumer>
+    { ({title,subTitle}) => (
+      <Fragment>
+        <h1>{title}</h1>
+        <h2>{subTitle}</h2>
+      </Fragment>
+    ) }
+  </TitleContext.Consumer>
+);
 
 class Lesson extends Component {
-  state = {
-    counter: 0
-  }
-  handleClick = (e) => {
-    this.setState( ({counter}) => ({counter: counter+1 }) );
-  }
   render() {
     return (
-      <div onClick={this.handleClick}>
-        <span>{this.state.counter}</span>
-        <MyPortal>
-          <div>TEST PORTAL</div>
-          <button>Click</button>
-        </MyPortal>
-      </div>
+      <TitleContext.Provider value={ {title: 'Text1', subTitle: 'Text2'} }>
+        <LevelOne />
+      </TitleContext.Provider>
     );
   }
 }
